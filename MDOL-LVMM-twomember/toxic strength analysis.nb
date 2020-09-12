@@ -1,0 +1,944 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     32753,        936]
+NotebookOptionsPosition[     31960,        917]
+NotebookOutlinePosition[     32316,        933]
+CellTagsIndexPosition[     32273,        930]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Datalist", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"Import", "[", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+         "\"\<salgrowthdata.xlsx\>\""}], "}"}], "]"}], "]"}], ",", "1"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "u", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x0", "=", "0.05"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", "1.07"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", "0.0177"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"time", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "3", ",", "6", ",", "9", ",", "12", ",", "15", ",", "18", ",", 
+     "24"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitmodel", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"NonlinearModelFit", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "@", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", "time", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Datalist", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "}"}]}], "]"}]}], ",", 
+       FractionBox[
+        RowBox[{"p", " ", 
+         RowBox[{"(", 
+          RowBox[{"d", "-", "u"}], ")"}], " ", "x0"}], 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "u"}], "*", "x0"}], "+", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"t", " ", 
+            RowBox[{"(", 
+             RowBox[{"d", "-", "u"}], ")"}]}]], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"d", " ", "p"}], "+", 
+            RowBox[{"u", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "p"}], "+", "x0"}], ")"}]}]}], ")"}]}]}]], ",", 
+       "u", ",", "t"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "@", "Datalist"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufit", "=", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"u", "/.", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"fitmodel", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<BestFitParameters\>\"", 
+         "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "fitmodel"}]}], "}"}]}], "]"}]}], ",", "4"}],
+     "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ufitmean", "=", 
+  RowBox[{"Mean", "@", 
+   RowBox[{"Transpose", "@", "ufit"}]}]}]}], "Input",
+ CellChangeTimes->{{3.797761143807804*^9, 3.797761171410217*^9}, {
+   3.79776124657942*^9, 3.797761345104473*^9}, {3.797761909573017*^9, 
+   3.7977619105324526`*^9}, 3.7977743391243725`*^9},
+ CellLabel->
+  "In[10478]:=",ExpressionUUID->"b72959cc-44e1-43ee-b9bc-b32a59ffd898"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"clist", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0.0001", ",", "0.00025", ",", "0.0005", ",", "0.001", ",", 
+     "0.0015", ",", "0.002", ",", "0.005"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlist", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", "clist", "}"}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"model1", "=", 
+   RowBox[{"NonlinearModelFit", "[", 
+    RowBox[{"fitlist", ",", 
+     RowBox[{"{", 
+      RowBox[{"u0", "*", 
+       RowBox[{"1", "/", 
+        RowBox[{"(", 
+         RowBox[{"1", "+", 
+          RowBox[{"(", 
+           RowBox[{"c", "/", "Ki"}], ")"}]}], ")"}]}]}], "}"}], ",", "Ki", 
+     ",", "c"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ki", "=", 
+  RowBox[{"Ki", "/.", 
+   RowBox[{
+   "model1", "[", "\"\<BestFitParameters\>\"", 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"model1", "[", "\"\<AdjustedRSquared\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ofit", "=", 
+  RowBox[{"9.2", "*", 
+   RowBox[{
+    RowBox[{"10", "^", 
+     RowBox[{"-", "7"}]}], "/", "ki"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlistplot", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"1000", "*", 
+       RowBox[{"{", "clist", "}"}]}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Salplot", "=", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ListPlot", "[", 
+      RowBox[{"fitlistplot", ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.5"}], ",", "10"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"RGBColor", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"38", "/", "255"}], ",", 
+             RowBox[{"157", "/", "255"}], ",", 
+             RowBox[{"128", "/", "255"}]}], "}"}], "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1.5"}], ",", "3.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "50"}], ",", "2000"}], "}"}]}], "}"}]}], ",", 
+          RowBox[{"PointSize", "[", "0.03", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{"model1", "[", 
+        RowBox[{"x", "/", "1000"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "10"}], "}"}], ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.5"}], ",", "10"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Blue", ",", 
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", 
+          RowBox[{"Dashing", "[", "0.05", "]"}]}], "]"}]}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1.5"}], ",", "3.25"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "50"}], ",", "2000"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<sal.tif\>\""}], 
+      "}"}], "]"}], ",", "Salplot"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7977612913354797`*^9, 3.797761303471361*^9}, {
+   3.797761394563241*^9, 3.7977614585905876`*^9}, {3.797761498269085*^9, 
+   3.7977614984982424`*^9}, {3.7977615374090643`*^9, 
+   3.7977617163743577`*^9}, {3.7977617614521556`*^9, 3.797761971717394*^9}, 
+   3.7977742149958625`*^9, {3.79777437164368*^9, 3.7977743873729*^9}, {
+   3.7977744407608275`*^9, 3.797774447813855*^9}},
+ CellLabel->
+  "In[10514]:=",ExpressionUUID->"2c613a36-f22f-4433-9726-db0ee6ec5a12"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Datalist", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"Import", "[", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+         "\"\<catgrowthdata.xlsx\>\""}], "}"}], "]"}], "]"}], ",", "1"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "u", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x0", "=", "0.05"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", "1.07"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", "0.0177"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"time", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "3", ",", "6", ",", "9", ",", "12", ",", "15", ",", "18", ",", 
+     "24"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitmodel", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"NonlinearModelFit", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "@", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", "time", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Datalist", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "}"}]}], "]"}]}], ",", 
+       FractionBox[
+        RowBox[{"p", " ", 
+         RowBox[{"(", 
+          RowBox[{"d", "-", "u"}], ")"}], " ", "x0"}], 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "u"}], "*", "x0"}], "+", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"t", " ", 
+            RowBox[{"(", 
+             RowBox[{"d", "-", "u"}], ")"}]}]], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"d", " ", "p"}], "+", 
+            RowBox[{"u", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "p"}], "+", "x0"}], ")"}]}]}], ")"}]}]}]], ",", 
+       "u", ",", "t"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "@", "Datalist"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufit", "=", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"u", "/.", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"fitmodel", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<BestFitParameters\>\"", 
+         "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "fitmodel"}]}], "}"}]}], "]"}]}], ",", "4"}],
+     "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufitmean", "=", 
+   RowBox[{"Mean", "@", 
+    RowBox[{"Transpose", "@", "ufit"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"clist", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0.001", ",", "0.0025", ",", "0.005", ",", "0.01", ",", "0.015",
+      ",", "0.02", ",", "0.05"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlist", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", "clist", "}"}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"model1", "=", 
+   RowBox[{"NonlinearModelFit", "[", 
+    RowBox[{"fitlist", ",", 
+     RowBox[{"{", 
+      RowBox[{"u0", "*", 
+       RowBox[{"1", "/", 
+        RowBox[{"(", 
+         RowBox[{"1", "+", 
+          RowBox[{"(", 
+           RowBox[{"c", "/", "Ki"}], ")"}]}], ")"}]}]}], "}"}], ",", "Ki", 
+     ",", "c"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ki", "=", 
+  RowBox[{"Ki", "/.", 
+   RowBox[{
+   "model1", "[", "\"\<BestFitParameters\>\"", 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"model1", "[", "\"\<AdjustedRSquared\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ofit", "=", 
+  RowBox[{"9.2", "*", 
+   RowBox[{
+    RowBox[{"10", "^", 
+     RowBox[{"-", "7"}]}], "/", "ki"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlistplot", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"1000", "*", 
+       RowBox[{"{", "clist", "}"}]}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Salplot", "=", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ListPlot", "[", 
+      RowBox[{"fitlistplot", ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "2"}], ",", "100"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"RGBColor", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"38", "/", "255"}], ",", 
+             RowBox[{"157", "/", "255"}], ",", 
+             RowBox[{"128", "/", "255"}]}], "}"}], "]"}], ",", 
+          RowBox[{"PointSize", "[", "0.03", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{"model1", "[", 
+        RowBox[{"x", "/", "1000"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "100"}], "}"}], ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "2"}], ",", "100"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Blue", ",", 
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", 
+          RowBox[{"Dashing", "[", "0.05", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<cat.tif\>\""}], 
+      "}"}], "]"}], ",", "Salplot"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{
+  3.797761420386349*^9, {3.7977637495862837`*^9, 3.7977637531718163`*^9}, {
+   3.7977741737623916`*^9, 3.797774186061782*^9}, {3.7977747309933243`*^9, 
+   3.7977747937665873`*^9}, {3.797774826625605*^9, 3.797774873191329*^9}},
+ CellLabel->
+  "In[10643]:=",ExpressionUUID->"65e7df6d-ece7-4a88-9e38-1c8f201a56a1"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.797763834154374*^9, 3.7977639027663193`*^9}, 
+   3.797764190199439*^9},ExpressionUUID->"05b5702f-6a34-4f9e-8610-\
+30ed37439d46"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Datalist", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"Import", "[", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+         "\"\<nap12growthdata.xlsx\>\""}], "}"}], "]"}], "]"}], ",", "1"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "u", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x0", "=", "0.05"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", "1.07"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", "0.0177"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"time", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "3", ",", "6", ",", "9", ",", "12", ",", "15", ",", "18", ",", 
+     "24"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitmodel", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"NonlinearModelFit", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "@", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", "time", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Datalist", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "}"}]}], "]"}]}], ",", 
+       FractionBox[
+        RowBox[{"p", " ", 
+         RowBox[{"(", 
+          RowBox[{"d", "-", "u"}], ")"}], " ", "x0"}], 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "u"}], "*", "x0"}], "+", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"t", " ", 
+            RowBox[{"(", 
+             RowBox[{"d", "-", "u"}], ")"}]}]], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"d", " ", "p"}], "+", 
+            RowBox[{"u", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "p"}], "+", "x0"}], ")"}]}]}], ")"}]}]}]], ",", 
+       "u", ",", "t"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "@", "Datalist"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufit", "=", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"u", "/.", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"fitmodel", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<BestFitParameters\>\"", 
+         "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "fitmodel"}]}], "}"}]}], "]"}]}], ",", "4"}],
+     "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufitmean", "=", 
+   RowBox[{"Mean", "@", 
+    RowBox[{"Transpose", "@", "ufit"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"clist", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0.0001", ",", "0.00025", ",", "0.0005", ",", "0.001", ",", 
+     "0.0015", ",", "0.002", ",", "0.005"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlist", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", "clist", "}"}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Show", "[", 
+   RowBox[{
+    RowBox[{"ListPlot", "[", "fitlist", "]"}], ",", 
+    RowBox[{"Plot", "[", 
+     RowBox[{
+      RowBox[{"model", "[", "x", "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"x", ",", "0", ",", "0.01"}], "}"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], ",", 
+    RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"model1", "=", 
+   RowBox[{"NonlinearModelFit", "[", 
+    RowBox[{"fitlist", ",", 
+     RowBox[{"{", 
+      RowBox[{"u0", "*", 
+       RowBox[{"1", "/", 
+        RowBox[{"(", 
+         RowBox[{"1", "+", 
+          RowBox[{"(", 
+           RowBox[{"c", "/", "Ki"}], ")"}]}], ")"}]}]}], "}"}], ",", "Ki", 
+     ",", "c"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ki", "=", 
+  RowBox[{"Ki", "/.", 
+   RowBox[{
+   "model1", "[", "\"\<BestFitParameters\>\"", 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"model1", "[", "\"\<AdjustedRSquared\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ofit", "=", 
+  RowBox[{"9.2", "*", 
+   RowBox[{
+    RowBox[{"10", "^", 
+     RowBox[{"-", "7"}]}], "/", "ki"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlistplot", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"1000", "*", 
+       RowBox[{"{", "clist", "}"}]}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"catplot", "=", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ListPlot", "[", 
+      RowBox[{"fitlistplot", ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.5"}], ",", "10"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"RGBColor", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"38", "/", "255"}], ",", 
+             RowBox[{"157", "/", "255"}], ",", 
+             RowBox[{"128", "/", "255"}]}], "}"}], "]"}], ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1.5"}], ",", "3.5"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "50"}], ",", "2000"}], "}"}]}], "}"}]}], ",", 
+          RowBox[{"PointSize", "[", "0.03", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{"model1", "[", 
+        RowBox[{"x", "/", "1000"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "10"}], "}"}], ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.5"}], ",", "10"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.01"}], ",", "0.4"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Blue", ",", 
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", 
+          RowBox[{"Dashing", "[", "0.05", "]"}]}], "]"}]}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "1.5"}], ",", "3.25"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "50"}], ",", "2000"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<nap12.tif\>\""}], 
+      "}"}], "]"}], ",", "catplot"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7977641920763135`*^9, 3.797764277516673*^9}, {
+   3.7977749764526043`*^9, 3.7977749921869855`*^9}, 3.797775422756443*^9},
+ CellLabel->
+  "In[10753]:=",ExpressionUUID->"e7659849-fb08-40c5-8996-fad417c197a5"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Datalist", "=", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{"Import", "[", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+         "\"\<napgrowthdata.xlsx\>\""}], "}"}], "]"}], "]"}], ",", "1"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ClearAll", "[", "u", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x0", "=", "0.05"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p", "=", "1.07"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"d", "=", "0.0177"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"time", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "3", ",", "6", ",", "9", ",", "12", ",", "15", ",", "18", ",", 
+     "24"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitmodel", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"NonlinearModelFit", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "@", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"{", "time", "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Datalist", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "}"}]}], "]"}]}], ",", 
+       FractionBox[
+        RowBox[{"p", " ", 
+         RowBox[{"(", 
+          RowBox[{"d", "-", "u"}], ")"}], " ", "x0"}], 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "u"}], "*", "x0"}], "+", 
+         RowBox[{
+          SuperscriptBox["\[ExponentialE]", 
+           RowBox[{"t", " ", 
+            RowBox[{"(", 
+             RowBox[{"d", "-", "u"}], ")"}]}]], " ", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"d", " ", "p"}], "+", 
+            RowBox[{"u", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"-", "p"}], "+", "x0"}], ")"}]}]}], ")"}]}]}]], ",", 
+       "u", ",", "t"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "@", "Datalist"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ufit", "=", 
+   RowBox[{"Partition", "[", 
+    RowBox[{
+     RowBox[{"u", "/.", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"fitmodel", "[", 
+          RowBox[{"[", "i", "]"}], "]"}], "[", "\"\<BestFitParameters\>\"", 
+         "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "fitmodel"}]}], "}"}]}], "]"}]}], ",", "4"}],
+     "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ufitmean", "=", 
+  RowBox[{"Mean", "@", 
+   RowBox[{"Transpose", "@", "ufit"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"clist", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "0", ",", "0.00001", ",", "0.000025", ",", "0.00005", ",", "0.0001", ",", 
+     "0.00015", ",", "0.0002", ",", "0.0005"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlist", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", "clist", "}"}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"model1", "=", 
+   RowBox[{"NonlinearModelFit", "[", 
+    RowBox[{"fitlist", ",", 
+     RowBox[{"{", 
+      RowBox[{"u0", "*", 
+       RowBox[{"(", 
+        RowBox[{"1", "-", 
+         RowBox[{"(", 
+          RowBox[{"c", "/", "Ki"}], ")"}]}], ")"}]}], "}"}], ",", "Ki", ",", 
+     "c"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"ki", "=", 
+  RowBox[{"Ki", "/.", 
+   RowBox[{
+   "model1", "[", "\"\<BestFitParameters\>\"", 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{"model1", "[", "\"\<AdjustedRSquared\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"ofit", "=", 
+  RowBox[{"9.2", "*", 
+   RowBox[{
+    RowBox[{"10", "^", 
+     RowBox[{"-", "7"}]}], "/", "ki"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fitlistplot", "=", 
+   RowBox[{"Transpose", "@", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"1000", "*", 
+       RowBox[{"{", "clist", "}"}]}], ",", 
+      RowBox[{"{", "ufitmean", "}"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"catplot", "=", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"ListPlot", "[", 
+      RowBox[{"fitlistplot", ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.1"}], ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0.24", ",", "0.32"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"RGBColor", "[", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"38", "/", "255"}], ",", 
+             RowBox[{"157", "/", "255"}], ",", 
+             RowBox[{"128", "/", "255"}]}], "}"}], "]"}], ",", 
+          RowBox[{"PointSize", "[", "0.03", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{
+       RowBox[{"model1", "[", 
+        RowBox[{"x", "/", "1000"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"-", "0.1"}], ",", "1"}], "}"}], ",", 
+       RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", "0.1"}], ",", "1"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0.24", ",", "0.32"}], "}"}]}], "}"}]}], ",", 
+       RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{"Blue", ",", 
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", 
+          RowBox[{"Dashing", "[", "0.05", "]"}]}], "]"}]}], ",", 
+       RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+       RowBox[{"FrameStyle", "\[Rule]", 
+        RowBox[{"Directive", "[", 
+         RowBox[{
+          RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", "Bold", 
+          ",", "45"}], "]"}]}], ",", 
+       RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<nap.tif\>\""}], 
+      "}"}], "]"}], ",", "catplot"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7977668386583457`*^9, 3.7977668862222*^9}, {
+   3.797767011344615*^9, 3.7977670322247376`*^9}, {3.797767101871813*^9, 
+   3.79776710307893*^9}, {3.797767134955717*^9, 3.797767159075403*^9}, {
+   3.797767203750193*^9, 3.7977672520598125`*^9}, 3.7977672953036427`*^9, {
+   3.7977673583958344`*^9, 3.797767363118966*^9}, {3.797767456982596*^9, 
+   3.797767458207277*^9}, 3.7977679510370936`*^9, 3.7977680529910884`*^9, {
+   3.797768314200438*^9, 3.7977683145904493`*^9}, {3.7977684413627043`*^9, 
+   3.79776846300496*^9}, 3.7977685266238546`*^9, {3.797768601046638*^9, 
+   3.797768668382053*^9}, {3.79777508990227*^9, 3.7977751044265385`*^9}, 
+   3.797775287703182*^9},
+ CellLabel->
+  "In[10735]:=",ExpressionUUID->"654d495e-af2d-4d37-8b1a-513d939ffcbb"]
+},
+WindowSize->{775, 450},
+WindowMargins->{{Automatic, 55}, {Automatic, 105}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (2019\:5e744\:67088\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2909, 85, 235, "Input",ExpressionUUID->"b72959cc-44e1-43ee-b9bc-b32a59ffd898"],
+Cell[3470, 107, 5346, 146, 333, "Input",ExpressionUUID->"2c613a36-f22f-4433-9726-db0ee6ec5a12"],
+Cell[8819, 255, 7207, 206, 520, "Input",ExpressionUUID->"65e7df6d-ece7-4a88-9e38-1c8f201a56a1"],
+Cell[16029, 463, 177, 3, 28, "Input",ExpressionUUID->"05b5702f-6a34-4f9e-8610-30ed37439d46"],
+Cell[16209, 468, 8159, 235, 577, "Input",ExpressionUUID->"e7659849-fb08-40c5-8996-fad417c197a5"],
+Cell[24371, 705, 7585, 210, 520, "Input",ExpressionUUID->"654d495e-af2d-4d37-8b1a-513d939ffcbb"]
+}
+]
+*)
+

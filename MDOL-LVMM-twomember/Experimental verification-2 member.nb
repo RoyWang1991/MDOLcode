@@ -1,0 +1,614 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     26794,        606]
+NotebookOptionsPosition[     26373,        590]
+NotebookOutlinePosition[     26838,        608]
+CellTagsIndexPosition[     26795,        605]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"conclist", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0.0001", ",", "0.0025", ",", "0.005", ",", "0.1"}], 
+    "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Time", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{"i", ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "0", ",", "108", ",", "12"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"freqplot", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"growthplot", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Do", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"plotlist1", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"plotlist2", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Do", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"data", "=", 
+         RowBox[{"First", "@", 
+          RowBox[{"Import", "[", 
+           RowBox[{"FileNameJoin", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+              "\"\<1110+0001-ccdB\>\"", ",", 
+              RowBox[{"\"\<data-ratio\>\"", "<>", 
+               RowBox[{"ToString", "@", "k"}], "<>", "\"\<-conc=\>\"", "<>", 
+               RowBox[{"ToString", "@", 
+                RowBox[{"conclist", "[", 
+                 RowBox[{"[", "j", "]"}], "]"}]}], "<>", "\"\<.xlsx\>\""}]}], 
+             "}"}], "]"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"ndata", "=", 
+         RowBox[{"Partition", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "@", "data"}], ",", "3"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"oddata", "=", 
+         RowBox[{"Partition", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Take", "[", 
+             RowBox[{"ndata", ",", "All", ",", 
+              RowBox[{"{", "1", "}"}]}], "]"}]}], ",", "4"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"data1", "=", 
+         RowBox[{"Partition", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Take", "[", 
+             RowBox[{"ndata", ",", "All", ",", 
+              RowBox[{"{", "2", "}"}]}], "]"}]}], ",", "4"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"data1OD", "=", 
+         RowBox[{"data1", "/", 
+          RowBox[{"(", 
+           RowBox[{"7.38", "*", 
+            RowBox[{"10", "^", "6"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"data2", "=", 
+         RowBox[{"Partition", "[", 
+          RowBox[{
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Take", "[", 
+             RowBox[{"ndata", ",", "All", ",", 
+              RowBox[{"{", "3", "}"}]}], "]"}]}], ",", "4"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"data2OD", "=", 
+         RowBox[{"data2", "/", 
+          RowBox[{"(", 
+           RowBox[{"1.03", "*", 
+            RowBox[{"10", "^", "8"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"F1", "=", 
+         RowBox[{"100", "*", 
+          RowBox[{"data1OD", "/", 
+           RowBox[{"(", 
+            RowBox[{"data1OD", "+", "data2OD"}], ")"}]}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"F2", "=", 
+         RowBox[{"100", "*", 
+          RowBox[{"data2OD", "/", 
+           RowBox[{"(", 
+            RowBox[{"data1OD", "+", "data2OD"}], ")"}]}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"oddata", "=", 
+         RowBox[{"data1OD", "+", "data2OD"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"plotdata1", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "F2"}]}], "}"}]}], "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"plotdata1er", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "F2"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"StandardDeviation", "@", 
+              RowBox[{"Transpose", "@", "F2"}]}], "}"}]}], "]"}]}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"plotdata2", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "oddata"}]}], "}"}]}], "]"}]}]}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"plotdata2er", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "oddata"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"StandardDeviation", "@", 
+              RowBox[{"Transpose", "@", "oddata"}]}], "}"}]}], "]"}]}]}], ";",
+         "\[IndentingNewLine]", 
+        RowBox[{"plotdata3", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "data1OD"}]}], "}"}]}], "]"}]}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"plotdata3er", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "data1OD"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"StandardDeviation", "@", 
+              RowBox[{"Transpose", "@", "data1OD"}]}], "}"}]}], "]"}]}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"plotdata4", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "data2OD"}]}], "}"}]}], "]"}]}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"plotdata4er", "=", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"{", "Time", "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Mean", "@", 
+              RowBox[{"Transpose", "@", "data2OD"}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"StandardDeviation", "@", 
+              RowBox[{"Transpose", "@", "data2OD"}]}], "}"}]}], "]"}]}]}], 
+        ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+        RowBox[{"Needs", "[", "\"\<ErrorBarPlots`\>\"", "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"plot1", "=", 
+         RowBox[{"Show", "[", 
+          RowBox[{
+           RowBox[{"ListLinePlot", "[", 
+            RowBox[{"plotdata1", ",", 
+             RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "105"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"RGBColor", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"249", "/", "255"}], ",", 
+                   RowBox[{"163", "/", "255"}], ",", 
+                   RowBox[{"32", "/", "255"}]}], "}"}], "]"}], ",", 
+                RowBox[{"Thickness", "[", "0.01", "]"}]}], "]"}]}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", 
+                "32"}], "]"}]}], ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"ErrorListPlot", "[", 
+            RowBox[{"plotdata1er", ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"RGBColor", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"249", "/", "255"}], ",", 
+                   RowBox[{"163", "/", "255"}], ",", 
+                   RowBox[{"32", "/", "255"}]}], "}"}], "]"}], ",", 
+                RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+                RowBox[{"Thickness", "[", "0.007", "]"}]}], "]"}]}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "105"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", 
+                "32"}], "]"}]}], ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"plot2", "=", 
+           RowBox[{"Show", "[", 
+            RowBox[{
+             RowBox[{"ListLinePlot", "[", 
+              RowBox[{"plotdata2", ",", 
+               RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+               RowBox[{"PlotRange", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], 
+               ",", 
+               RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+               RowBox[{"PlotStyle", "\[Rule]", 
+                RowBox[{"Directive", "[", 
+                 RowBox[{
+                  RowBox[{"RGBColor", "[", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"249", "/", "255"}], ",", 
+                    RowBox[{"163", "/", "255"}], ",", 
+                    RowBox[{"32", "/", "255"}]}], "}"}], "]"}], ",", 
+                  RowBox[{"Thickness", "[", "0.01", "]"}]}], "]"}]}], ",", 
+               RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+               RowBox[{"FrameStyle", "\[Rule]", 
+                RowBox[{"Directive", "[", 
+                 RowBox[{
+                  RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", 
+                  "32"}], "]"}]}], ",", 
+               RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"ErrorListPlot", "[", 
+              RowBox[{"plotdata2er", ",", 
+               RowBox[{"PlotStyle", "\[Rule]", 
+                RowBox[{"Directive", "[", 
+                 RowBox[{
+                  RowBox[{"RGBColor", "[", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"249", "/", "255"}], ",", 
+                    RowBox[{"163", "/", "255"}], ",", 
+                    RowBox[{"32", "/", "255"}]}], "}"}], "]"}], ",", 
+                  RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+                  RowBox[{"Thickness", "[", "0.007", "]"}]}], "]"}]}], ",", 
+               RowBox[{"PlotRange", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], 
+               ",", 
+               RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+               RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+               RowBox[{"FrameStyle", "\[Rule]", 
+                RowBox[{"Directive", "[", 
+                 RowBox[{
+                  RowBox[{"Thickness", "[", "0.01", "]"}], ",", "Black", ",", 
+                  "32"}], "]"}]}], ",", 
+               RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], "]"}]}], 
+          ";"}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"plot3", "=", 
+         RowBox[{"Show", "[", 
+          RowBox[{
+           RowBox[{"ListLinePlot", "[", 
+            RowBox[{"plotdata3", ",", 
+             RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{"Red", ",", 
+                RowBox[{"Thickness", "[", "0.01", "]"}]}], "]"}]}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.01", "]"}], ",", "40"}], "]"}]}],
+              ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}], ",", 
+             RowBox[{"LabelStyle", "\[Rule]", 
+              RowBox[{"Opacity", "[", "0", "]"}]}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"ErrorListPlot", "[", 
+            RowBox[{"plotdata3er", ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{"Red", ",", 
+                RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+                RowBox[{"Thickness", "[", "0.007", "]"}]}], "]"}]}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.01", "]"}], ",", "40"}], "]"}]}],
+              ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}], ",", 
+             RowBox[{"LabelStyle", "\[Rule]", 
+              RowBox[{"Opacity", "[", "0", "]"}]}]}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"plot4", "=", 
+         RowBox[{"Show", "[", 
+          RowBox[{
+           RowBox[{"ListLinePlot", "[", 
+            RowBox[{"plotdata4", ",", 
+             RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{"Blue", ",", 
+                RowBox[{"Thickness", "[", "0.01", "]"}]}], "]"}]}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.01", "]"}], ",", "40"}], "]"}]}],
+              ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}], ",", 
+             RowBox[{"LabelStyle", "\[Rule]", 
+              RowBox[{"Opacity", "[", "0", "]"}]}]}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"ErrorListPlot", "[", 
+            RowBox[{"plotdata4er", ",", 
+             RowBox[{"PlotStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{"Blue", ",", 
+                RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+                RowBox[{"Thickness", "[", "0.007", "]"}]}], "]"}]}], ",", 
+             RowBox[{"PlotRange", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "5"}], ",", "120"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"-", "0.01"}], ",", "1.2"}], "}"}]}], "}"}]}], ",", 
+             RowBox[{"ImageSize", "\[Rule]", "Large"}], ",", 
+             RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+             RowBox[{"FrameStyle", "\[Rule]", 
+              RowBox[{"Directive", "[", 
+               RowBox[{
+                RowBox[{"Thickness", "[", "0.02", "]"}], ",", "40"}], "]"}]}],
+              ",", 
+             RowBox[{"Axes", "\[Rule]", "False"}], ",", 
+             RowBox[{"LabelStyle", "\[Rule]", 
+              RowBox[{"Opacity", "[", "0", "]"}]}]}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"groplot", "=", 
+         RowBox[{"Show", "[", 
+          RowBox[{"plot3", ",", "plot4"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"plotlist1", "=", 
+         RowBox[{"Join", "[", 
+          RowBox[{"plotlist1", ",", 
+           RowBox[{"{", "plot1", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"plotlist2", "=", 
+         RowBox[{"Join", "[", 
+          RowBox[{"plotlist2", ",", 
+           RowBox[{"{", "groplot", "}"}]}], "]"}]}], ";"}], 
+       "\[IndentingNewLine]", ",", 
+       RowBox[{"{", 
+        RowBox[{"k", ",", "1", ",", "5"}], "}"}]}], "]"}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"ratioplot", "=", 
+      RowBox[{"Show", "[", "plotlist1", "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"freqplot", "=", 
+      RowBox[{"Join", "[", 
+       RowBox[{"freqplot", ",", 
+        RowBox[{"{", "ratioplot", "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"growthplot", "=", 
+      RowBox[{"Join", "[", 
+       RowBox[{"growthplot", ",", 
+        RowBox[{"{", "plotlist2", "}"}]}], "]"}]}], ";"}], 
+    "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "1", ",", 
+      RowBox[{"Length", "@", "conclist"}]}], "}"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gridplot1", "=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"Partition", "[", 
+      RowBox[{"freqplot", ",", "5"}], "]"}], ",", 
+     RowBox[{"Spacings", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "0"}], "}"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gridplot2", "=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{"Transpose", "@", "growthplot"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<1110+0001-ccdB\>\"",
+        ",", "\"\<ratioplot.tif\>\""}], "}"}], "]"}], ",", "gridplot1"}], 
+   "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<1110+0001-ccdB\>\"",
+        ",", "\"\<growthplot.tif\>\""}], "}"}], "]"}], ",", "gridplot2"}], 
+   "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7977827476288137`*^9, 3.797783040127141*^9}, {
+   3.7977832793095236`*^9, 3.797783452202796*^9}, {3.7977835575195484`*^9, 
+   3.797783645481082*^9}, 3.7977836945044994`*^9, {3.797783753186387*^9, 
+   3.7977837791519337`*^9}, {3.797783885609688*^9, 3.797784006402239*^9}, {
+   3.797784037897541*^9, 3.79778414399332*^9}, {3.7977843716989007`*^9, 
+   3.797784388746862*^9}, {3.7978257681257796`*^9, 3.797825866689369*^9}, {
+   3.7978260970877767`*^9, 3.7978260988431754`*^9}, {3.7978262375335207`*^9, 
+   3.797826242182768*^9}, 3.7978262783168917`*^9, {3.79782650267426*^9, 
+   3.7978265309436026`*^9}, {3.797826773924901*^9, 3.7978268328784847`*^9}, 
+   3.7978268896410823`*^9, {3.7978269451976576`*^9, 3.797827061361472*^9}, {
+   3.797827103553631*^9, 3.797827171810618*^9}, {3.797827303973628*^9, 
+   3.7978274531828375`*^9}, {3.7978278123613014`*^9, 
+   3.7978278128276606`*^9}, {3.7978278431895056`*^9, 
+   3.7978279315492325`*^9}, {3.7978279918832755`*^9, 
+   3.7978280652059155`*^9}, {3.7978281929496346`*^9, 3.797828219314167*^9}, {
+   3.7978290434896855`*^9, 3.7978292592284126`*^9}, {3.7978294632692504`*^9, 
+   3.7978296454758916`*^9}, 3.7978297360289445`*^9, {3.797829852038472*^9, 
+   3.79782986270921*^9}, {3.7978299134096923`*^9, 3.797829957966267*^9}, 
+   3.797829999070553*^9, {3.797830035303729*^9, 3.797830045569104*^9}, {
+   3.7978300792257433`*^9, 3.7978301044395003`*^9}, {3.797830200023641*^9, 
+   3.7978302039800887`*^9}, {3.79783027325249*^9, 3.7978302753478527`*^9}, {
+   3.797830307244111*^9, 3.797830308683443*^9}, {3.797830339580454*^9, 
+   3.797830342394755*^9}, {3.797830383831786*^9, 3.7978305110616007`*^9}, {
+   3.7978305992328615`*^9, 3.797830763350871*^9}, {3.7978308128285604`*^9, 
+   3.797830916083702*^9}, 3.7978309695210896`*^9, {3.7978310268300905`*^9, 
+   3.797831039565206*^9}, {3.7978310721493025`*^9, 3.797831097364683*^9}, {
+   3.79783113610942*^9, 3.797831144188944*^9}, {3.797831175917218*^9, 
+   3.7978311786996098`*^9}, {3.7978312114156485`*^9, 
+   3.7978312131607046`*^9}, {3.7978332307062883`*^9, 3.797833231895958*^9}, 
+   3.797833288620675*^9, {3.7978402433937416`*^9, 3.7978402543503118`*^9}, {
+   3.797840340695877*^9, 3.7978403410050516`*^9}, {3.7978437356419725`*^9, 
+   3.797843743581849*^9}, {3.7978450749416237`*^9, 3.7978451011734*^9}, {
+   3.797846109937805*^9, 3.797846119209981*^9}, {3.797846991599473*^9, 
+   3.7978470054493546`*^9}, {3.7978471822491055`*^9, 
+   3.7978471957686343`*^9}, {3.7978551276947346`*^9, 3.797855166367448*^9}, {
+   3.7978559352010174`*^9, 3.79785596784686*^9}, {3.7978560734529953`*^9, 
+   3.7978560836746235`*^9}, {3.7978562654870872`*^9, 3.797856274724103*^9}, {
+   3.7978584822279296`*^9, 3.7978585149374986`*^9}, {3.7978586195510435`*^9, 
+   3.797858655712329*^9}, {3.797858692084518*^9, 3.797858707192893*^9}, {
+   3.79785875639791*^9, 3.7978587667593675`*^9}, {3.7978588317292213`*^9, 
+   3.7978588390171556`*^9}, {3.797858941038588*^9, 3.797858966437275*^9}, {
+   3.797859287524124*^9, 3.797859298015917*^9}, {3.797860947401986*^9, 
+   3.797860963536804*^9}, {3.7978611052462025`*^9, 3.7978611125891004`*^9}, {
+   3.797861152256189*^9, 3.7978611892519674`*^9}, {3.7978612247973423`*^9, 
+   3.797861229921912*^9}, {3.797861286849514*^9, 3.7978613306424885`*^9}, {
+   3.797862510852844*^9, 3.7978625504317904`*^9}, {3.7978628288108735`*^9, 
+   3.797862828819908*^9}, {3.7978628731248665`*^9, 3.797862917035061*^9}, {
+   3.7978647093786583`*^9, 3.797864734342725*^9}, {3.7978647720813217`*^9, 
+   3.7978647745215125`*^9}, {3.7978648295027294`*^9, 
+   3.7978648304591713`*^9}, {3.7978648722418213`*^9, 
+   3.7978648761000414`*^9}, {3.7978649166906877`*^9, 3.797865062004347*^9}, {
+   3.797865141733616*^9, 3.797865188132814*^9}, {3.7978660465351515`*^9, 
+   3.7978660876303453`*^9}, {3.797866292961339*^9, 3.7978663549422293`*^9}, {
+   3.7978665462761726`*^9, 3.79786660127818*^9}, {3.7978689365113983`*^9, 
+   3.79786893652141*^9}, {3.7978701305588512`*^9, 3.797870133896015*^9}, {
+   3.7979098352371426`*^9, 3.797909835243081*^9}, {3.797909939005224*^9, 
+   3.797909947808144*^9}, {3.7979099907122965`*^9, 3.7979099907192383`*^9}, {
+   3.7979100497406635`*^9, 3.7979100570644827`*^9}, {3.7979101090218363`*^9, 
+   3.797910109029815*^9}, {3.7979102469831905`*^9, 3.7979102469892178`*^9}, {
+   3.7979103201718636`*^9, 3.797910320181836*^9}, {3.797910500913777*^9, 
+   3.797910500919786*^9}, {3.797910632580612*^9, 3.797910638808714*^9}, {
+   3.7979108175354323`*^9, 3.7979108175424137`*^9}, {3.797910967259824*^9, 
+   3.797910967267804*^9}, {3.797924290604375*^9, 3.797924290613351*^9}, 
+   3.7979244488793993`*^9, {3.7979255577711515`*^9, 3.7979255577801266`*^9}, {
+   3.797925603491479*^9, 3.797925603501452*^9}, {3.797925750410553*^9, 
+   3.7979257532434587`*^9}, {3.797925791104771*^9, 3.797925791113712*^9}, {
+   3.797925960038348*^9, 3.797925970565151*^9}, {3.7979263737698126`*^9, 
+   3.7979263737817817`*^9}, {3.7979269284834733`*^9, 3.797926939834797*^9}, {
+   3.7981007437800283`*^9, 3.798100743789996*^9}, {3.7981008238456845`*^9, 
+   3.7981008238566575`*^9}, {3.7981009606161137`*^9, 
+   3.7981009606221356`*^9}, {3.808887261450268*^9, 3.8088872837448206`*^9}},
+ CellLabel->
+  "In[239]:=",ExpressionUUID->"8554cf13-dd5f-457b-8700-42b82defe1e5"]
+},
+WindowSize->{1264, 661},
+WindowMargins->{{19, Automatic}, {Automatic, 23}},
+TaggingRules->{"NewCellStyle" -> "Text"},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (2019\:5e744\:67088\
+\:65e5)",
+StyleDefinitions->FrontEnd`FileName[{"Wolfram"}, "ChatTools.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 25811, 568, 1079, "Input",ExpressionUUID->"8554cf13-dd5f-457b-8700-42b82defe1e5"]
+}
+]
+*)
+
