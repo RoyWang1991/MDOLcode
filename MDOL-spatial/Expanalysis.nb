@@ -1,0 +1,220 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7950,        212]
+NotebookOptionsPosition[      7268,        194]
+NotebookOutlinePosition[      7624,        210]
+CellTagsIndexPosition[      7581,        207]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"relative", " ", "fraction"}], "-", "exp"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"substrate", "=", 
+     RowBox[{"{", 
+      RowBox[{
+      "2.5", ",", "5", ",", "7.5", ",", "10", ",", "12.5", ",", "15", ",", 
+       "17.5", ",", "20"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"dt", "=", "0.1"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"expdata", "=", 
+     RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Do", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"allDetdata", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"allEmbdata", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"lelist", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Do", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"data", "=", 
+           RowBox[{"Import", "[", 
+            RowBox[{"FileNameJoin", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<exp\>\"", 
+               ",", 
+               RowBox[{"ToString", "@", 
+                RowBox[{"substrate", "[", 
+                 RowBox[{"[", "j", "]"}], "]"}]}], ",", 
+               RowBox[{"\"\<cellnumber\>\"", "<>", 
+                RowBox[{"ToString", "@", "k"}], "<>", "\"\<.csv\>\""}]}], 
+              "}"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"Detdata", "=", 
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Take", "[", 
+             RowBox[{"data", ",", "All", ",", 
+              RowBox[{"{", "2", "}"}]}], "]"}]}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Embdata", "=", 
+           RowBox[{"Flatten", "@", 
+            RowBox[{"Take", "[", 
+             RowBox[{"data", ",", "All", ",", 
+              RowBox[{"{", "3", "}"}]}], "]"}]}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"timele", "=", 
+           RowBox[{"Length", "@", "Detdata"}]}], ";", "\[IndentingNewLine]", 
+          RowBox[{"lelist", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"lelist", ",", 
+             RowBox[{"{", 
+              RowBox[{"timele", "*", "dt"}], "}"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"time", "=", 
+           RowBox[{"Table", "[", 
+            RowBox[{
+             RowBox[{"dt", "*", "a"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"a", ",", "1", ",", "timele"}], "}"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"finalcell", "=", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Last", "@", "Detdata"}], ",", 
+             RowBox[{"Last", "@", "Embdata"}]}], "}"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"finalfreq", "=", 
+           RowBox[{"N", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"finalcell", "[", 
+                RowBox[{"[", "1", "]"}], "]"}], "/", 
+               RowBox[{"Total", "@", "finalcell"}]}], ",", 
+              RowBox[{
+               RowBox[{"finalcell", "[", 
+                RowBox[{"[", "2", "]"}], "]"}], "/", 
+               RowBox[{"Total", "@", "finalcell"}]}]}], "}"}]}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"expdata", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"expdata", ",", 
+             RowBox[{"{", "finalfreq", "}"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", "\[IndentingNewLine]", 
+          RowBox[{"Detdata", "=", 
+           RowBox[{"Transpose", "@", 
+            RowBox[{"Join", "[", 
+             RowBox[{
+              RowBox[{"{", "time", "}"}], ",", 
+              RowBox[{"{", "Detdata", "}"}]}], "]"}]}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"Embdata", "=", 
+           RowBox[{"Transpose", "@", 
+            RowBox[{"Join", "[", 
+             RowBox[{
+              RowBox[{"{", "time", "}"}], ",", 
+              RowBox[{"{", "Embdata", "}"}]}], "]"}]}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"allDetdata", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"allDetdata", ",", 
+             RowBox[{"{", "Detdata", "}"}]}], "]"}]}], ";", 
+          "\[IndentingNewLine]", 
+          RowBox[{"allEmbdata", "=", 
+           RowBox[{"Join", "[", 
+            RowBox[{"allEmbdata", ",", 
+             RowBox[{"{", "Embdata", "}"}]}], "]"}]}], ";"}], 
+         "\[IndentingNewLine]", ",", 
+         RowBox[{"{", 
+          RowBox[{"k", ",", "1", ",", "8"}], "}"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"le", "=", 
+        RowBox[{"Max", "@", "lelist"}]}], ";"}], "\[IndentingNewLine]", ",", 
+      RowBox[{"{", 
+       RowBox[{"j", ",", "1", ",", "8"}], "}"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Detfreq", "=", 
+     RowBox[{"Partition", "[", 
+      RowBox[{
+       RowBox[{"Partition", "[", 
+        RowBox[{
+         RowBox[{"Flatten", "@", 
+          RowBox[{"Take", "[", 
+           RowBox[{"expdata", ",", "All", ",", 
+            RowBox[{"{", "1", "}"}]}], "]"}]}], ",", "8"}], "]"}], ",", "8"}],
+       "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Export", "[", 
+     RowBox[{
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+         "\"\<Detfreq-exp.xlsx\>\""}], "}"}], "]"}], ",", "Detfreq"}], "]"}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.8068917291980505`*^9, 3.8068917683218575`*^9}, {
+  3.8068918026635256`*^9, 3.8068918170705724`*^9}, {3.806891895150805*^9, 
+  3.806891913480064*^9}},
+ CellLabel->"In[43]:=",ExpressionUUID->"a619e0f2-a287-4a4d-928e-cd7bb86739c5"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.806891856121216*^9, 3.806891858093027*^9}, {
+   3.8068949573665752`*^9, 3.806894994075302*^9}, 
+   3.8088939983676043`*^9},ExpressionUUID->"ba8ecef6-aa0a-4ed4-ae50-\
+437f1149907f"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.8068950296362543`*^9, 3.806895058316778*^9}, 
+   3.8088940001097064`*^9},ExpressionUUID->"56044edb-dd0b-44c7-adc7-\
+560b5ca33236"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.8069039585598345`*^9, 3.806903973332056*^9}, 
+   3.8069040041156096`*^9, 
+   3.8088940012904854`*^9},ExpressionUUID->"d7473edf-45f2-4109-9670-\
+6bcfc630315c"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.8069040249269376`*^9, 3.806904027431362*^9}, 
+   3.8088940023505545`*^9},ExpressionUUID->"37deeef1-8e9f-412d-8b0a-\
+f7324ce5a3e4"]
+},
+WindowSize->{1264, 661},
+WindowMargins->{{143, Automatic}, {Automatic, 8}},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (2019\:5e744\:67088\
+\:65e5)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 5900, 150, 542, "Input",ExpressionUUID->"a619e0f2-a287-4a4d-928e-cd7bb86739c5"],
+Cell[6461, 172, 229, 4, 28, "Input",ExpressionUUID->"ba8ecef6-aa0a-4ed4-ae50-437f1149907f"],
+Cell[6693, 178, 179, 3, 28, "Input",ExpressionUUID->"56044edb-dd0b-44c7-adc7-560b5ca33236"],
+Cell[6875, 183, 207, 4, 28, "Input",ExpressionUUID->"d7473edf-45f2-4109-9670-6bcfc630315c"],
+Cell[7085, 189, 179, 3, 28, "Input",ExpressionUUID->"37deeef1-8e9f-412d-8b0a-f7324ce5a3e4"]
+}
+]
+*)
+
