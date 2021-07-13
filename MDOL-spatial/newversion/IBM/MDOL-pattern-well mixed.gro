@@ -1,0 +1,657 @@
+internal unit print ( ... ) "print";   // prints to the console
+internal unit clear() "clear";         // clears the console
+internal unit cprint ( ... ) "cprint"; // prints to standard out
+internal int fopen ( string, string ) "fopen";   // opens a file for writing. mode = "w" erases old contents, mode = "a" appends old contents
+internal unit fprint ( int, ... ) "fprint";  // writes the the file specified by the first argument (which should be obtained with fopen)
+
+internal unit skip () "skip";
+internal unit exit () "exit";
+internal int atoi ( string ) "atoi";
+internal real atof ( string ) "atof";
+internal string tostring ( 'a ) "tostring";
+internal int length ( 'a list ) "length";
+internal 'b list map_aux ( 'a -> 'b, 'a list ) "map";
+internal real sumlist_aux ( 'a list ) "sumlist_aux";
+fun map f L . map_aux ( f, L );
+
+// ///////////////////////////////////////////// 
+// math
+// 
+
+pi := 3.1415927;
+
+internal real sin ( real ) "sin";
+internal real cos ( real ) "cos";
+internal real tan ( real ) "tan";
+
+internal real asin ( real ) "asin";
+internal real acos ( real ) "acos";
+internal real atan ( real, real ) "atan";
+
+internal real sinh ( real ) "sinh";
+internal real cosh ( real ) "cosh";
+internal real tanh ( real ) "tanh";
+
+internal real asinh ( real ) "asinh";
+internal real acosh ( real ) "acosh";
+internal real atanh ( real ) "atanh";
+
+internal real log ( real ) "log";
+internal real log10 ( real )"log10";
+
+internal real ceil ( real ) "ceil";
+internal real floor ( real ) "floor";
+
+internal real sqrt ( real ) "sqrt";
+internal int rand ( int ) "rand";
+internal unit srand ( int ) "srand"; // seeds with the time if argument is <= 0
+
+fun rate k . k * dt > rand(100000) / 100000.0;
+
+///////////////////////////////////////////////
+// lists
+// 
+
+// 
+// reverses the list x
+// 
+fun rev x .
+  if x = {} 
+    then {} 
+    else rev (tail x) # { head x }
+  end;
+
+// 
+// a function for zipping two lists together
+// 
+fun zip A B .
+  if A != {} & B != {} 
+    then { head A, head B } @ zip (tail A) (tail B)
+    else {}
+  end;
+
+// 
+// makes a list of n elements all of which are equal to default
+fun makelist n default .
+  if n <= 0
+    then {}
+    else default @ ( makelist (n-1) default )
+  end;
+
+// 
+// sums a list of numbers
+// 
+fun sumlist vals . sumlist_aux ( vals );
+
+// 
+// makes a table of elements by mapping f onto the list { n, n+1, ..., m-1, m }
+// 
+fun table f n m .
+  if ( n > m ) then {}
+  else
+    if n = m then { f n }
+    else ( f n ) @ table f (n+1) m
+    end
+  end;
+
+// 
+// tests for membership in a list
+// 
+fun member x L .
+  if L = {} then
+    false
+  else
+    if x = head L 
+      then true
+      else member x (tail L)
+    end
+  end;
+
+// 
+// removes element x from L
+// 
+fun remove x L .
+  if L = {} then
+    {}
+  else
+    if x = head L then
+      remove x ( tail L )
+    else
+      (head L) @ ( remove x ( tail L ) )
+    end
+  end;
+
+// 
+// forms the cross product of two lists (taken as sets)
+// 
+fun cross A B .
+  if A = {}
+    then {}
+    else ( map ( \ x . { head A, x } ) B ) # ( cross ( tail A ) B )
+  end;
+
+// 
+// makes the list { 0, 1, ..., n-1 }
+// 
+fun range n . table ( \i . i ) 0 (n-1);
+
+// 
+// takes a list { x1, x2, ... } and returns { { x1 }, { x2 }, ... }
+// 
+fun tocol v . map ( \ x . { x } ) v;
+
+// 
+// returns L with x in for L[i] -- user must check list bounds!
+// 
+fun replace L i x . 
+  if L = {} 
+    then {}
+    else if i = 0
+      then x @ (tail L)
+      else head L @ replace (tail L) (i-1) x
+    end
+  end;
+
+// Cell types
+internal unit ecoli ( [ ... ], 'a ) "ecoli";
+//internal unit ecoli ( [ ... ], string list, 'a ) "ecoli";
+internal unit c_ecolis ( int, real, real, real, string list, 'a) "c_ecolis";
+//internal unit c_ecolis ( int, real, real, real, 'a) "c_ecolis";
+// internal unit yeast ( [ ... ], 'a ) "yeast";
+
+// Signals
+internal int signal ( real, real ) "signal";
+internal unit set_signal ( int, real, real, real ) "set_signal";
+internal unit set_signal_rect ( int, real, real, real, real, real ) "set_signal_rect";
+internal real get_signal ( int ) "get_signal";
+internal unit emit_signal ( int, real ) "emit_signal";
+internal unit absorb_signal ( int, real ) "absorb_signal";
+internal unit reaction ( int list, int list, real ) "reaction";
+internal real list list get_signal_matrix ( int ) "get_signal_matrix";
+
+// World control
+internal unit message ( int, string ) "message";
+internal unit clear_messages ( int ) "clear_messages";
+internal unit reset () "reset";
+internal unit stop () "stop";
+internal unit start () "start";
+internal real stats ( string ) "stats";
+internal unit snapshot ( string ) "snapshot";
+internal unit dump ( int ) "dump";
+internal unit dump_single ( int ) "dump_single";
+internal unit dump_multiple ( ... ) "dump_multiple";
+internal unit dump_multiple_plasmids ( ... ) "dump_multiple_plasmids";
+internal real time() "time";
+
+// Gene Expression
+internal unit genes ([...]) "genes";
+internal unit plasmids_genes ([...]) "plasmids_genes";
+internal unit action (...) "action";
+internal unit reset_actions () "reset_actions";
+
+// Nutrients
+//internal real my_d_vol () "my_d_vol";
+internal real available () "available";
+
+//Cellsignals
+internal unit grid ( string, string, int, int, int ) "grid";
+internal int s_signal ( [...] ) "s_signal";
+internal unit s_add_reaction ( int list, int list, real) "s_add_reaction";
+internal int cf_signal ( real, real, real ) "cf_signal";
+internal int s_cf_signal ( real, real, real, real ) "s_cf_signal";
+internal unit s_set_signal ( int, real, real, real ) "s_set_signal";
+internal unit s_set_signal_rect ( int, real, real, real, real, real ) "s_set_signal_rect";
+internal real s_get_signal ( int ) "s_get_signal";
+internal real s_get_signal_area ( int ) "s_get_signal_area";
+internal unit s_emit_signal ( int, real, string ) "s_emit_signal";
+internal unit s_emit_signal_point (int, real, real, real) "s_emit_signal_point";
+internal unit s_emit_signal_area ( int, real ) "s_emit_signal_area";
+internal unit s_absorb_signal ( int, real, string ) "s_absorb_signal";
+internal unit s_absorb_signal_area ( int, real ) "s_absorb_signal_area";
+
+internal unit s_emit_cf_signal ( int, real, string ) "s_emit_cf_signal";
+internal real s_absorb_cf_signal ( int, real, int, string ) "s_absorb_cf_signal";
+internal real s_get_cf_signal ( int, real, int ) "s_get_cf_signal";
+
+// Themes
+dark_theme := [
+
+  background := "#000000",
+  ecoli_edge := "#444444",
+  ecoli_selected := "#880000",
+
+  signals := {
+    { 1, 0, 1 },
+    { 0, 1, 1 },
+    { 1, 1, 0 },
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 }
+  },
+
+  chemostat := "#444499",
+  message := "#ffffff",
+  mouse := "#ffffff"
+
+];
+
+bright_theme := [
+
+  background := "#ffffff",
+  ecoli_edge := "#777777",
+  ecoli_selected := "#ff0000",
+
+  signals := {
+    { 1, 0, 1 },
+    { 0, 1, 1 },
+    { 1, 1, 0 },
+    { 1, 0, 0 },
+    { 0, 1, 0 },
+    { 0, 0, 1 }
+  },
+
+  chemostat := "#999999",
+  message := "#999999",
+  mouse := "#000000"
+
+];
+
+internal unit set_theme ( [ ... ] ) "set_theme";
+set_theme ( bright_theme );
+internal unit zoom ( real ) "zoom";
+
+// Signals
+
+// Chemostat
+internal unit chemostat ( bool ) "chemostat";
+internal unit barrier ( real, real, real, real ) "barrier";
+
+// Cell specific
+internal unit die() "die";
+internal unit divide() "divide";
+internal unit run ( real ) "run";
+internal unit tumble ( real ) "tumble";
+internal [ ... ] geometry() "geometry";
+
+// Parameter Values
+internal unit set ( string, real ) "set";
+dt1 := 0.16;
+dt2 := 0.16;
+
+// default global parameters
+set ( "dt", 0.02 );
+set ( "gfp_saturation_min", 0.0 );
+set ( "gfp_saturation_max", 50.0 );
+set ( "rfp_saturation_min", 0.0 );
+set ( "rfp_saturation_max", 50.0 );
+set ( "yfp_saturation_min", 0.0 );
+set ( "yfp_saturation_max", 50.0 );
+set ( "cfp_saturation_min", 0.0 );
+set ( "cfp_saturation_max", 50.0 );
+
+set ( "chemostat_width",  200 );
+set ( "chemostat_height", 200 );
+
+set ( "throttle", 0.0 );
+set ( "population_max", 1000 );
+
+// signal parameters. Note: if you redefine these, do so before you
+// declare any signals. The parameters can't be changed after signals are declared,
+// and they apply to all of signals you declare.
+set ( "signal_grid_width", 800 );
+set ( "signal_grid_height", 800 );
+set ( "signal_element_size", 5 );
+
+//default paramters for E. coli
+set ( "ecoli_growth_rate", 0.0346574 );   // reactions/min
+set ( "ecoli_init_length", 2.0 );           //um
+set ( "ecoli_division_length_mean", 3.75 ); // um
+set ( "ecoli_division_size_variance", 0.15 ); // um
+set ( "ecoli_diameter", 1.0 );            // um
+set ( "ecoli_scale", 10.0 );              // pixels/um
+
+// default nutrient parameters
+set ("nutrients", 0.0); //0.0: off, 1.0: on
+set ("nutrient_amount", 200.0); //Arbitrary units
+set ("nutrient_consumption_rate", 0.033); // Units/dt per bacterium
+set ("nutrient_grid_length", 10.0); //In grid cells
+set ("nutrient_grid_cell_size", 30.0); //In pixels
+set ("nutrient_consumption_mode", 0.0); //0: Homogeneous, 1: Gradient
+
+//default parameters for signals (Sandra)
+set ("signals", 0.0); //0.0: off, 1.0: on
+set ("signals_grid_length", 10.0); //In grid cells
+set ("signals_grid_cell_size", 30.0); //In pixels
+
+// default parameters for Yeast
+set ( "yeast_growth_rate", 0.015 );
+set ( "yeast_division_size_mean", 1.0 );
+set ( "yeast_division_size_variance", 0.0001 );
+
+// Random generator parameter
+set ( "seed", 0.0 );
+
+
+set ("dt", 0.02);
+set ("population_max", 6000);
+//set_theme ( dark_theme << [ signals := { { 0, 0/255, 0/255 }, { 0, 0/255, 213/255 },{ 0/255, 0/255, 0/255 } } ] );
+set_theme ( bright_theme << [ signals := { { 1, 0/255, 255/255 }, { 0, 0/255, 213/255 },{ 0/255, 0/255, 0/255 } } ] );
+simnum := 4;
+timegap1 := 0.5;//For image tracking;
+timegap2 := 0.5;//For position tracking;
+timegap3 := 0.5;//For concentration tracking;
+data1:={};
+data2:={};
+posdata1:={};
+posdata2:={};
+s1 := 0; // position time tracker
+s2 := 0; // concentration time tracker
+
+R := 40; // grid unit.
+d := 40; // range for input the substrate
+s0 := 20; // substrate conc.
+i0 := 0; // intermediate conc.
+p0 := 0; // intermediate conc.
+set ( "signal_grid_width", d*R );
+set ( "signal_grid_height", d*R );
+set ( "signal_element_size", R );
+set("signals", 1.0);
+set("signals_draw", 1.0);
+scale := 7.5;
+area := d*R*d*R/(scale*scale);
+S0 := s0*area;
+I0 := i0*area;
+P0 := p0*area;
+//S := signal ( 2, 0 );// define substrate
+//I := signal ( 2, 0 );// define intermediates
+//P := signal ( 2, 0 );// define product
+
+//r := 25*d/R;
+//foreach i in cross(range r)(range r) do {
+//    set_signal ( S, i[0]*R, i[1]*R, s0 ),
+//	set_signal ( S, -i[0]*R, i[1]*R, s0 ),
+//	set_signal ( S, i[0]*R, -i[1]*R, s0 ),
+//	set_signal ( S, -i[0]*R, -i[1]*R, s0 ),
+//} end;// make the substrate evenly distributed in the range.
+
+k1 := 4.6;
+E1 := 20;
+K1 := 0.0096;
+k2 := 200;
+E2 := 20;
+K2 := 0.0015;
+kg1 := 0.637;
+kg2 := 0.637;
+Y := 0.229;
+c1 := 1;
+c2 := 1;
+Kg := 0.02;
+rs := 26.3;
+ri1 := 4.27;
+ri2 := 4.27;
+rp1 := 25.1;
+rp2 := 25.1;
+sita := 30;
+
+fun fact n .
+  if n > 0
+    then n
+    else 0
+  end;
+  //make varas over 0
+  
+fun diff1 n .
+  if n > 0
+    then n
+    else 0
+  end;
+  //if out>in, absorb
+  
+fun diff2 n .
+  if n < 0
+    then -n
+    else 0
+  end;
+  //if out<in, emit
+
+fun react s n.
+if s < n
+    then s
+    else n
+  end;
+
+Dcell := 1000; 
+program DETOXIFIER() := {
+
+  as := 0;
+  as1 := 0;
+  as2 := 0;
+  ap := 0;
+  ap1 := 0;
+  ap2 := 0;
+  ir := 0;
+  ir1 := 0;
+  ir2 := 0;
+  z :=0;
+  Sout1 := 0;
+  Sin1 := 0;
+  Iin1 := 0;
+  Pin1 := 0;
+  react1 := 0;
+  mu1 := 0;
+  Iout1 :=0;
+  Pout1 :=0;
+  rfp :=0;
+  g := geometry();
+  
+  true : {
+    rfp := volume * 100,
+    Sout1 := S0/area,
+    as := rs*(Sout1-Sin1)*dt,
+	as1 := diff1 as,
+	as1 :=react as1 Sout1,
+    //absorb_signal ( S, as1 ),
+	Sin1 := Sin1 + (as1),
+	as2 := diff2 as,
+	as2 :=react as2 Sin1,
+    //emit_signal ( S, as2 ),
+	Sin1 := Sin1 - (as2),
+	//Sin1 := fact Sin1,
+	S0 :=S0-as1+as2,
+	
+	react1 := k1*E1*Sin1*dt/(K1+Sin1),
+	react1 := react react1 Sin1, 
+	Iin1 := Iin1 + react1,
+	Sin1 := Sin1 - react1,
+	//Sin1 := fact Sin1,
+	
+	Iout1 := I0/area,
+	ir := ri1*(Iout1-Iin1)*dt,
+	ir1 := diff1 ir,
+	ir1 :=react ir1 Iout1,
+	//absorb_signal ( I, ir1 ),
+	Iin1 := Iin1 + (ir1),
+	ir2 := diff2 ir,
+	ir2 :=react ir2 Iin1,
+	//emit_signal ( I, ir2 ),
+	Iin1 := Iin1 - (ir2),
+	//Iin1 := fact Iin1,
+	//print(Sin1),
+	I0 :=I0-ir1+ir2,
+	
+	Pout1 :=P0/area,
+	ap := rp1*(Pout1-Pin1)*dt,	
+	ap1 := diff1 ap,
+	ap1 :=react ap1 Pout1,
+	//absorb_signal ( P, ap1 ),
+	Pin1 := Pin1 + (ap1),
+	ap2 :=diff2 ap,
+	ap2 := react ap2 Pin1,
+	//emit_signal ( P, ap2 ),
+	Pin1 := Pin1 - (ap2),
+	//Pin1 := fact Pin1,
+	//print(Pin1),
+	//data1 :={Sout1,Sin1,Iout1,Iin1,Pout1,Pin1,mu1}@data1,
+	P0 :=P0-ap1+ap2, 
+	
+	mu1 := ((kg1 * Pin1) / ( Kg + Pin1 ))*Y*c1*(1/(1+(Sin1*sita))),
+	set ( "ecoli_growth_rate", mu1),
+	Pin1 := Pin1 -((kg1*Pin1*dt1) / ( Kg + Pin1 )),
+	Pin1 := fact Pin1
+  };
+  s1 >= timegap2-dt:{
+  g := geometry(),
+  posdata1 := { id, g.x, g.y, g.theta } @ posdata1
+  };
+  s2 >= timegap3-dt:{data1 :={id,Sout1,Sin1,Iout1,Iin1,Pout1,Pin1,ap,mu1}@data1};
+  daughter : { Dcell := Dcell + 1 }; 
+  volume < 0.5 : { die() }
+  
+};
+
+Ecell := 1000;  
+program EMBEZZLER() := {
+  as := 0;
+  as1 := 0;
+  as2 := 0;
+  ai := 0;
+  ai1 := 0;
+  ai2 := 0;
+  pr := 0;
+  pr1 := 0;
+  pr2 := 0;
+  Sout2 := 0;
+  Sin2 := 0;
+  Iin2 := 0;
+  Pin2 := 0;
+  Iout2 := 0;
+  Pout2 := 0;
+  react2 := 0;
+  reactg := 0;
+  mu2 :=0;
+  gfp :=0;
+  g := geometry();
+  true : {
+    gfp := volume * 100,
+    Sout2 := S0/area,
+    as := rs*(Sout2-Sin2)*dt,
+	as1 := diff1 as,
+	as1 :=react as1 Sout2,
+    //absorb_signal ( S, as1 ),
+	Sin2 := Sin2 + (as1),
+	as2 := diff2 as,
+	as2 :=react as2 Sin2,
+    //emit_signal ( S, as2 ),
+	Sin2 := Sin2 - (as2),
+	//Sin2 := fact Sin2,
+	S0 := S0-as1+as2,
+	
+    Iout2 := I0/area,
+	ai := ri2*(Iout2-Iin2)*dt,
+	ai1 := diff1 ai,
+	ai1 :=react ai1 Iout2,
+    //absorb_signal ( I, ai1 ),
+	Iin2 := Iin2 + (ai1),
+	ai2 := diff2 ai,
+	ai2 :=react ai2 Iin2,
+    //emit_signal ( I, ai2 ),
+	Iin2 := Iin2 - (ai2),
+	//Iin2 := fact Iin2,
+	I0 :=I0-ai1+ai2,
+	
+	react2 := k2*E2*Iin2*dt/(K2+Iin2),
+	react2 := react react2 Iin2, 
+	Pin2 := Pin2 + react2,
+	Iin2 := Iin2 - react2,
+	//Iin2 := fact Iin2,
+	//print(Iin2),
+	
+	mu2 := ((kg2 * Pin2)/(Kg + Pin2))*Y*c2*(1/(1+(Sin2*sita))),
+	set ( "ecoli_growth_rate", mu2),
+	Pin2 := Pin2 - ((kg2*Pin2*dt2) / (Kg + Pin2)),
+	Pin2 := fact Pin2,
+	//print ( id, " 2 ", Pin2),
+	
+	Pout2 := P0/area,
+	pr := rp2*(Pout2-Pin2)*dt,	
+	pr1 := diff1 pr,
+	pr1 :=react pr1 Pout2,
+	//absorb_signal ( P, pr1 ),
+	Pin2 := Pin2 + (pr1),
+	pr2 := diff2 pr,
+	pr2 :=react pr2 Pin2,
+	//emit_signal ( P, pr2 ),
+	Pin2 := Pin2 - (pr2),
+	//Pin2 := fact Pin2,
+	//print(Sin2),
+	P0 :=P0-pr1+pr2, 
+  };
+   s1 >= timegap2-dt:{
+   g := geometry(),
+   posdata2 := { id, g.x, g.y, g.theta } @ posdata2
+   };
+   s2 >= timegap3-dt:{data2 :={id,Sout2,Sin2,Iout2,Iin2,Pout2,Pin2,pr,mu2}@data2};
+   daughter : { Ecell := Ecell + 1 }; 
+   volume < 0.5 : { die() };
+};
+
+t :=0;
+fp1 := "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/images"<>tostring(simnum)<>"/";
+fpn := fopen ( "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/"<>"cellnumber"<>tostring(simnum)<>".csv", "w" );
+fpd := fopen ( "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/"<>"dataD"<>tostring(simnum)<>".txt", "w" );
+fpe := fopen ( "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/"<>"dataE"<>tostring(simnum)<>".txt", "w" );
+fpD := fopen ( "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/"<>"DET"<>tostring(simnum)<>".csv", "w" );
+fpE := fopen ( "d:/Reasearch/Single-cell/Pattern/model/IBM/simdata/"<>"Emb"<>tostring(simnum)<>".csv", "w" );
+l :=0;
+program main() :=
+{
+c_ecolis(Dcell, 0, 0, 300, {},program DETOXIFIER());
+c_ecolis(Ecell, 0, 0, 300, {},program EMBEZZLER());
+    t := 0; // frame rate time tracker
+	s :=0; // cellnumber time tracker
+	st := 0;// absolute time
+	n :=0;
+    true : {
+        t := t + dt,
+        s := s + dt,
+		s1 :=s1 + dt,
+		s2 :=s2 + dt,
+		st := st + dt,
+    }
+	
+   s > 0.1 : {
+   fprint ( fpn, st, ", ", Dcell, ", ", Ecell,"\n"),
+   s := 0,
+  }
+  
+  t > timegap1 : {
+        snapshot ( fp1 <> "expression" <> if n <10 then "0" else "" end <> tostring(n) <> ".tif" ),
+        n := n + 1,
+        t := 0,
+  }
+	
+
+  s1 > timegap2 : {
+   fprint ( fpD, "{" <> tostring(time()) <> "," <> tostring(posdata1) <> "},\n"),
+   fprint ( fpE, "{" <> tostring(time()) <> "," <> tostring(posdata2) <> "},\n"),
+   s1 := 0,
+   posdata1 :={},
+   posdata2 :={}
+  }
+  s2 > timegap3 : {
+   fprint ( fpd, "{" <> tostring(time()) <> "," <> tostring(data1) <> "},\n"),
+   fprint ( fpe, "{" <> tostring(time()) <> "," <> tostring(data2) <> "},\n"),
+   s2 := 0,
+   data1 :={},
+   data2 :={}
+  }
+
+	
+	st> 500:{    
+	    snapshot ( fp1 <> "expression-end.tif" ),
+    }
+	
+	st >= 150000 : {
+    stop()
+  }
+};
